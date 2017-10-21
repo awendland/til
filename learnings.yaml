@@ -1,0 +1,6 @@
+---
+date: 2017-10-19
+note: |
+  When creating Android firmware signing keys you need to use sha1 as the message digest.
+
+  The [Android developer site](https://source.android.com/devices/tech/ota/sign_builds#manually-generating-keys) talks about using `-3` for the public exponent, but doesn't mention the critical `-sha1` flag (or at least it was critical in the OTA + recovery we were working on).
