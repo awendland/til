@@ -1,33 +1,31 @@
----
-date: 2017-10-21
-note: |
-  There is a MASSIVE performance difference between using DigestInputStream w/ one byte at a time vs. a read loop that uses a processing buffer (such as 8 KiB) when calculating a sha-256 on Android (and likely w/ other hash functions and on other platforms).
-
-  The original code (all Kotlin, though maybe not ideomatic):
-
-  ```
-  val digest = MessageDigest.getInstance("SHA-256")
-  val digestInputStream = DigestInputStream(inputStream, digest)
-  while (digestInputStream.read() != -1);
-  val digestBytes: ByteArray = digest.digest()
-  ```
-
-  The improved code:
-  ```
-  val digest = MessageDigest.getInstance("SHA-256")
-  val buffer = ByteArray(8192) // 8 KiB buffer size
-  var byteCount = it.read(buffer)
-  while (byteCount > 0) {
-      digest.update(buffer, 0, byteCount)
-      byteCount = it.read(buffer)
-  }
-  val digestBytes = digest.digest()
-  ```
-
-  The change resulted in a performance difference of 15 seconds for a 7 MB file reduced down to 80 milliseconds. Both were using a BufferedInputStream and review of CPU usage in the Snapdragon Profiler showed that neither held a core at 100% during usage (not sure  why that wasn't the case in the second approach; maybe IO bound).
----
-date: 2017-10-19
-note: |
-  When creating Android firmware signing keys you need to use sha1 as the message digest.
-
-  The [Android developer site](https://source.android.com/devices/tech/ota/sign_builds#manually-generating-keys) talks about using `-3` for the public exponent, but doesn't mention the critical `-sha1` flag (or at least it was critical in the OTA + recovery we were working on).
+- date: 2017-10-21
+  note: |
+    There is a MASSIVE performance difference between using DigestInputStream w/ one byte at a time vs. a read loop that uses a processing buffer (such as 8 KiB) when calculating a sha-256 on Android (and likely w/ other hash functions and on other platforms).
+  
+    The original code (all Kotlin, though maybe not ideomatic):
+  
+    ```kotlin
+    val digest = MessageDigest.getInstance("SHA-256")
+    val digestInputStream = DigestInputStream(inputStream, digest)
+    while (digestInputStream.read() != -1);
+    val digestBytes: ByteArray = digest.digest()
+    ```
+  
+    The improved code:
+    ```kotlin
+    val digest = MessageDigest.getInstance("SHA-256")
+    val buffer = ByteArray(8192) // 8 KiB buffer size
+    var byteCount = it.read(buffer)
+    while (byteCount > 0) {
+        digest.update(buffer, 0, byteCount)
+        byteCount = it.read(buffer)
+    }
+    val digestBytes = digest.digest()
+    ```
+  
+    The change resulted in a performance difference of 15 seconds for a 7 MB file reduced down to 80 milliseconds. Both were using a BufferedInputStream and review of CPU usage in the Snapdragon Profiler showed that neither held a core at 100% during usage (not sure  why that wasn't the case in the second approach; maybe IO bound).
+- date: 2017-10-19
+  note: |
+    When creating Android firmware signing keys you need to use sha1 as the message digest.
+  
+    The [Android developer site](https://source.android.com/devices/tech/ota/sign_builds#manually-generating-keys) talks about using `-3` for the public exponent, but doesn't mention the critical `-sha1` flag (or at least it was critical in the OTA + recovery we were working on).
