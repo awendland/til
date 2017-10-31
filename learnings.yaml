@@ -1,3 +1,12 @@
+- date: 2017-10-31
+  note: |
+    It's possible to extract multiple subdirectories in a git repo into a new git repo using a combination of cloning and filter-branch.
+
+    1. Clone the git repo and switch to the clone
+    2. To extract the desired subdirectories (subdir1 and subdir2) run `git filter-branch --tree-filter "mkdir reorg && test -d subdir1 && mv subdir1 reorg/ || test -d subdir2 && mv subdir2 reorg/ || echo 'Nothing to do for requested directories'" HEAD`
+    3. Move the desired subdirectories to the top level of the project with `git filter-branch -f --subdirectory-filter reorg -- --all`
+
+    This will preserve the original author, date, commit message, and more.
 - date: 2017-10-21
   note: |
     There is a MASSIVE performance difference between using DigestInputStream w/ one byte at a time vs. a read loop that uses a processing buffer (such as 8 KiB) when calculating a sha-256 on Android (and likely w/ other hash functions and on other platforms).
