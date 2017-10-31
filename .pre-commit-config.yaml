@@ -1,0 +1,13 @@
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    sha: e718847ccbc65cd72a89fefb4db61c55ec4d430d
+    hooks:
+    -   id: check-case-conflict
+    -   id: check-merge-conflict
+    -   id: check-symlinks
+    -   id: detect-private-key
+    -   id: check-executables-have-shebangs
+    -   id: check-yaml
+-   repo: git://github.com/luminopia/pre-commit-hooks
+    sha: v0.0.4
+    hooks:
+    -   id: enforce-action-comments
