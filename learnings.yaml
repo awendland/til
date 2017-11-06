@@ -1,3 +1,16 @@
+- date: 2017-11-06
+  note: |
+    Loading an environment file can be done using this simple shell command `export $(cat "$envFile")`. This supports loading files like:
+
+    ```sh
+    APP_NAME=recommended-content
+    APP_DIR=recommended_content
+    VERSION_PATH=recommended_content/app/VERSION
+    AWS_REGION=us-east-1
+    AWS_ECR=1111111111.dkr.ecr.us-east-1.amazonaws.com/repo/rc
+    AWS_EB_ENV=rc-staging
+    AWS_S3_BUCKET=elasticbeanstalk-us-east-1-1111111111111
+    ```
 - date: 2017-10-31
   note: |
     It's possible to extract multiple subdirectories in a git repo into a new git repo using a combination of cloning and filter-branch.
