@@ -1,3 +1,6 @@
+- date: 2017-11-15
+  note: |
+    S3 rate limits UploadPartCopy operations at 300 requests per second. This doesn't seem to be documented anywhere, but this is what the support team informed me of when we kept getting rate limited while running copy operations across 128 processes w/ 20 threads each for 16 TiB of video content. They said we were making 1050 requests per second which was triggerring the rate limiting operation, but moving it down to 300, or partitioning the bucket which is a manual process on their end, would address the issue.
 - date: 2017-11-06
   note: |
     Loading an environment file can be done using this simple shell command `export $(cat "$envFile")`. This supports loading files like:
