@@ -1,6 +1,19 @@
+- date: 2018-04-12
+  note: |
+    If there isn't a squash/rebase policy for code prior to merging into the repo's mainline, it can be difficult to review historical changes at a high level. Thankfully, `git` is pretty powerful and the [git-log(1) Manual Page](http://schacon.github.io/git/git-log.html#_examples) has some powerful examples, one of which covers this scenario exactly:
+
+    ```
+    git log --patch -m --first-parent
+    ```
+
+    Breaking it down:
+
+    - `--patch` - "Generate patch (AKA show the diff)."
+    - `-m` - "This flag makes the merge commits show the full diff like regular commits; for each merge parent, a separate log entry and diff is generated. An exception is that only diff against the first parent is shown when --first-parent option is given; in that case, the output represents the changes the merge brought into the then-current branch."
+    - `--first-parent` - "Follow only the first parent commit upon seeing a merge commit. This option can give a better overview when viewing the evolution of a particular topic branch, because merges into a topic branch tend to be only about adjusting to updated upstream from time to time, and this option allows you to ignore the individual commits brought in to your history by such a merge."
 - date: 2017-11-15
   note: |
-          S3 rate limits UploadPartCopy operations at 300 requests per second. I struggled to find this documented anywhere (EDIT: found it at [Request Rate and Performance Considerations](http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html) with some additional info such as the 800 rps burst that explains how sometimes the 128 processes approach worked), but this is what the support team informed me of when we kept getting rate limited while running copy operations across 128 processes w/ 20 threads each for 16 TiB of video content. They said we were making 1050 requests per second which was triggerring the rate limiting operation, but moving it down to 300, or partitioning the bucket which is a manual process on their end, would address the issue.
+    S3 rate limits UploadPartCopy operations at 300 requests per second. I struggled to find this documented anywhere (EDIT: found it at [Request Rate and Performance Considerations](http://docs.aws.amazon.com/AmazonS3/latest/dev/request-rate-perf-considerations.html) with some additional info such as the 800 rps burst that explains how sometimes the 128 processes approach worked), but this is what the support team informed me of when we kept getting rate limited while running copy operations across 128 processes w/ 20 threads each for 16 TiB of video content. They said we were making 1050 requests per second which was triggerring the rate limiting operation, but moving it down to 300, or partitioning the bucket which is a manual process on their end, would address the issue.
 - date: 2017-11-06
   note: |
     Loading an environment file can be done using this simple shell command `export $(cat "$envFile")`. This supports loading files like:
@@ -26,9 +39,9 @@
 - date: 2017-10-21
   note: |
     There is a MASSIVE performance difference between using DigestInputStream w/ one byte at a time vs. a read loop that uses a processing buffer (such as 8 KiB) when calculating a sha-256 on Android (and likely w/ other hash functions and on other platforms).
-  
+
     The original code (all Kotlin, though maybe not ideomatic):
-  
+
     ```kotlin
     val digest = MessageDigest.getInstance("SHA-256")
     val digestInputStream = DigestInputStream(inputStream, digest)
@@ -47,10 +60,10 @@
     }
     val digestBytes = digest.digest()
     ```
-  
+
     The change resulted in a performance difference of 15 seconds for a 7 MB file reduced down to 80 milliseconds. Both were using a BufferedInputStream and review of CPU usage in the Snapdragon Profiler showed that neither held a core at 100% during usage (not sure  why that wasn't the case in the second approach; maybe IO bound).
 - date: 2017-10-19
   note: |
     When creating Android firmware signing keys you need to use sha1 as the message digest.
-  
+
     The [Android developer site](https://source.android.com/devices/tech/ota/sign_builds#manually-generating-keys) talks about using `-3` for the public exponent, but doesn't mention the critical `-sha1` flag (or at least it was critical in the OTA + recovery we were working on).
