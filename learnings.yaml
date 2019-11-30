@@ -1,3 +1,18 @@
+- date: 2019-11-30
+  note: |
+    You can use [wkhtmltopdf](https://github.com/wkhtmltopdf/wkhtmltopdf) to turn a webpage directly into a PDF, without weird for-print formatting issues.
+    
+    It's a little more work to get a single page PDF (at least until [#1627](https://github.com/wkhtmltopdf/wkhtmltopdf/issues/1627) is addressed), but you can do it by first creating a PDF
+    
+    ```
+    wkhtmltopdf -T 0 -B 0 --page-width 210mm 'URL' output-paged.pdf
+    ```
+    
+    and then counting the number of pages in the resulting PDF and multiplying them by 297mm (which is the height of an A4 page). Use this resulting number as the `--page-height`. For example, a 6 page PDF would be:
+    
+    ```
+    wkhtmltopdf -T 0 -B 0 --page-width 210mm --page-height 1782mm 'URL' output-single.pdf
+    ```
 - date: 2018-04-12
   note: |
     If there isn't a squash/rebase policy for code prior to merging into the repo's mainline, it can be difficult to review historical changes at a high level. Thankfully, `git` is pretty powerful and the [git-log(1) Manual Page](http://schacon.github.io/git/git-log.html#_examples) has some powerful examples, one of which covers this scenario exactly:
